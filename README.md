@@ -1,6 +1,6 @@
 # Como executar os testes
 
-Este projeto contém um exemplo simples de cálculo de desconto em Python, com testes automatizados usando `pytest`.
+Este projeto contém exemplos em Python para cálculo de desconto e priorização de chamados, com testes automatizados usando `pytest`.
 
 ## Estrutura esperada
 
@@ -8,7 +8,9 @@ Este projeto contém um exemplo simples de cálculo de desconto em Python, com t
 ai-agent-test-auto/
 ├── requirements.txt
 ├── discount.py
-└── test_discount.py
+├── test_discount.py
+├── ticket_prioritization.py
+└── test_ticket_prioritization.py
 ```
 
 ## 1. Acessar o diretório do projeto
@@ -110,3 +112,30 @@ Se as dependências já estiverem instaladas, basta executar:
 ```cmd
 python -m pytest -v
 ```
+
+## Priorização de chamados
+
+A função `prioritize_tickets` recebe uma sequência de chamados, cada um como um
+dicionário com o campo `priority`. Os valores reconhecidos são `alta`, `média`
+e `baixa`, sem distinção entre maiúsculas/minúsculas e espaços ao redor. O
+resultado contém chamados reconhecidos em ordem de prioridade, mantendo a ordem
+de chegada entre prioridades iguais, e uma lista separada de prioridades
+desconhecidas.
+
+```python
+from ticket_prioritization import prioritize_tickets
+
+chamados = [
+    {"id": "CH-001", "priority": "baixa"},
+    {"id": "CH-002", "priority": "alta"},
+    {"id": "CH-003", "priority": "média"},
+    {"id": "CH-004", "priority": "a definir"},
+]
+
+resultado = prioritize_tickets(chamados)
+```
+
+Neste exemplo fictício, `CH-002`, `CH-003` e `CH-001` aparecem em
+`resultado.ordered_tickets`; `CH-004` aparece em
+`resultado.unknown_priority_tickets` para sinalização, sem receber uma
+prioridade presumida.
